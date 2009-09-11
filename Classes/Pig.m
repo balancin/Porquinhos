@@ -20,14 +20,6 @@
     return self;
 }
 
-- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
-
-	NSLog(@"AH!");
-	//[pigsDict setObject:[[NSNumber alloc] initWithInt:30] forKey:[NSString stringWithFormat:@"%i", pigId]];
-	life = 30;
-	
-}
-
 -(int)life {
 
 	return life;

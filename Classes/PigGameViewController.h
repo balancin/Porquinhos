@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "Grid.h"
+#import "Pill.h"
 
 @interface PigGameViewController : UIViewController {
 

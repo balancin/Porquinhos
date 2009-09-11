@@ -8,12 +8,18 @@
 
 #import <Foundation/Foundation.h>
 #import "Pig.h"
+#import "Pill.h"
 
 @interface Grid : NSObject {
 
 	NSMutableDictionary* pigsDict;
 	int mainTime;
 	UIView* view;
+	UILabel* deadsLabel;
+	UILabel* timeLabel;
+	int timeCounter;
+	int deads;
+	NSTimer* mainLoop;
 	
 }
 
