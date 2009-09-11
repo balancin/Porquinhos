@@ -32,6 +32,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 	
+	[self.view setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"farm_bg.png"]]];
 	Grid* grid = [[Grid alloc] init];
 	[grid initWithView:self.view];
 	
