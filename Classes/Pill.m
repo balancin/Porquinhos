@@ -1,30 +1,14 @@
-//
-//  Pill.m
-//  PigGame
-//
-//  Created by Fabio Balancin on 9/11/09.
-//  Copyright 2009 Umpulo. All rights reserved.
-//
+//Pill.m
 
 #import "Pill.h"
 
-
 @implementation Pill
 
-@synthesize pigsDict;
-
-- (id)initWithFrame:(CGRect)frame {
-    if (self = [super initWithFrame:frame]) {
-        // Initialization code
-    }
-    return self;
-}
+@synthesize pigsDict, up_life; 
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
 	
-	NSLog(@"Clicaaa!");
-	usingPill = YES;
-	
+	//Cria uma replica da pilula que sera arrastada
 	pillActiveView = [[UIImageView alloc] initWithImage:self.image];
 	pillActiveView.frame = self.frame;
 	
@@ -34,6 +18,7 @@
 
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
 	
+	//Move a pilula na tela
 	UITouch* allTouches = [touches anyObject];
 	CGPoint location = [allTouches locationInView:self.superview];
 	
@@ -43,6 +28,7 @@
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
 
+	//Detecta em que porquinho a pilula foi colocada ou se nao foi em um e deleta a pilula da tela
 	UITouch* allTouches = [touches anyObject];
 	CGPoint location = [allTouches locationInView:self.superview];
 	if(location.x >= [[pigsDict objectForKey:@"0"] frame].origin.x && location.x <= [[pigsDict objectForKey:@"2"] frame].origin.x+[[pigsDict objectForKey:@"2"] frame].size.width){
@@ -50,24 +36,19 @@
 		float xPos = ceil((location.x-[[pigsDict objectForKey:@"0"] frame].origin.x)/[[pigsDict objectForKey:@"2"] frame].size.width)-1;
 		float yPos = ceil((location.y-[[pigsDict objectForKey:@"0"] frame].origin.y)/[[pigsDict objectForKey:@"6"] frame].size.height)-1;
 		int pigId = xPos+(yPos*3);
-		if(![[pigsDict objectForKey:[NSString stringWithFormat:@"%i", pigId]] dead])
+		if(![[pigsDict objectForKey:[NSString stringWithFormat:@"%i", pigId]] dead]){
+			AudioServicesPlaySystemSound(up_life);
 			[[pigsDict objectForKey:[NSString stringWithFormat:@"%i", pigId]] setLife:30];
-		NSLog(@"Soltaaaaa!!! %i", pigId);
+		}
 		
 	}
 	
 	[pillActiveView removeFromSuperview];
 	
-}
-
-- (void)drawRect:(CGRect)rect {
-    // Drawing code
-}
-
+} 
 
 - (void)dealloc {
     [super dealloc];
 }
-
 
 @end

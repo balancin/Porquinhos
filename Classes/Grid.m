@@ -1,21 +1,27 @@
-//
-//  Grid.m
-//  PigGame
-//
-//  Created by Fabio Balancin on 9/9/09.
-//  Copyright 2009 Umpulo. All rights reserved.
-//
-
+//Grid.m
 #import "Grid.h"
-
 
 @implementation Grid
 
 -(void) initWithView:(UIView*)viewScene {
-
+	
+	//Diretorio que se encontra o som
+	NSString *sndPath = [[NSBundle mainBundle]
+								pathForResource:@"squeeze-toy-2"
+								ofType:@"wav"]; 
+	//Referencia do caminho do som
+	CFURLRef sndURL = (CFURLRef)[[NSURL alloc]
+										initFileURLWithPath:sndPath];
+	//Criando objeto do som
+	AudioServicesCreateSystemSoundID(sndURL, &up_life);
+	
+	//Setando o numero de mortes para 0
 	deads = 0;
+	
+	//recebendo o palco
 	view = viewScene; 
 	
+	//Configura textos iniciais
 	deadsLabel = [[UILabel alloc] initWithFrame:CGRectMake(20, 75, 190, 30)];
 	deadsLabel.font = [UIFont fontWithName:@"Arial" size:20];
 	deadsLabel.backgroundColor = [UIColor clearColor];
@@ -34,19 +40,16 @@
 	mainLoop = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(mainLoop) userInfo:nil repeats:YES];
 	pigsDict = [[NSMutableDictionary alloc] init];
 	
-	//Cria porquinho na tela
+	//Cria referencia de imagem do porquinho
 	UIImage* image = [UIImage imageNamed:@"pig_s1.png"];
-	//NSMutableArray* pigs = [[NSMutableArray alloc] init];
-	for(int i = 0; i < 9; i++){
 	
-		//NSLog(@"%f %f %i", (i%3)*image.size.width, ((i-(i%3))/3)*image.size.height, ((i-(i%3))/3)*20);
-		//[pigs addObject:[[NSArray alloc] initWithObjects:[NSNumber numberWithFloat:(i%3)*image.size.width], [NSNumber numberWithFloat:((i-(i%3))/3)*image.size.height], nil]];
-
+	//Adiciona porcos na tela
+	for(int i = 0; i < 9; i++){ 
+		
 		Pig* imageView = [[Pig alloc] initWithImage:image];
 		imageView.pigId = i;
 		imageView.tag = i;
 		imageView.frame = CGRectMake((i%3)*image.size.width+35, ((i-(i%3))/3)*image.size.height+100, image.size.width, image.size.height); //(i%3)*image.size.height
-		imageView.pigsDict = pigsDict;
 		imageView.dead = NO;
 		imageView.life = 30;
 		[pigsDict setObject:imageView forKey:[NSString stringWithFormat:@"%i", i]];
@@ -55,9 +58,11 @@
 		
 	}
 	
+	//Cria pilula na tela
 	UIImage* pillImage = [UIImage imageNamed:@"pill.png"];
 	Pill* pill = [[Pill alloc] initWithImage:pillImage];
 	pill.pigsDict = pigsDict;
+	pill.up_life = up_life;
 	pill.userInteractionEnabled = YES;
 	pill.frame = CGRectMake(20, 350, pillImage.size.width, pillImage.size.height);
 	[viewScene addSubview:pill];
@@ -67,26 +72,23 @@
 	pillIdicate.frame = CGRectMake(pill.frame.origin.x+pillImage.size.width+10, pill.frame.origin.y+5, pillIndicateImage.size.width, pillIndicateImage.size.height);
 	[viewScene addSubview:pillIdicate];  
 	
-//	UIImageView* imageView = [[UIImageView alloc] initWithImage:image];
-//	imageView.frame = CGRectMake(0, 0, image.size.width, image.size.height);
-//	
-//	[view addSubview:imageView];
-	
-	
 }
 
 -(void) mainLoop {
 
-	mainTime = mainTime+1;
-	NSLog(@"mainTime %i", mainTime);
+	//Começa contador de tempo
+	mainTime = mainTime+1; 
 	
+	//Verifica se morreram todos os porcos
 	if(deads == 9){
 		
+		//Game over
 		[mainLoop invalidate]; 
 		deadsLabel.text = @"Game Over !";
 		
 	} else {
 	
+		//Verifica se o tempo acabou
 		if(timeCounter <= 1){
 			
 			deadsLabel.text = [NSString stringWithFormat:@"Você conseguiu !", deads];	
@@ -105,10 +107,7 @@
 					} else
 						[(Pig*)[pigsDict objectForKey:[NSString stringWithFormat:@"%i", i]] setLife:([[pigsDict objectForKey:[NSString stringWithFormat:@"%i", i]] life]-1)]; 
 					
-				}
-				
-				//int n1 = [[pigsDict objectForKey:[NSString stringWithFormat:@"%i", i]] life]*100;
-				//NSLog(@"Pig %i %i %i de %i", i, n1, n1/30, [[pigsDict objectForKey:[NSString stringWithFormat:@"%i", i]] life]);
+				} 
 				
 			}
 			

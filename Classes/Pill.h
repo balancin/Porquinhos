@@ -1,22 +1,17 @@
-//
-//  Pill.h
-//  PigGame
-//
-//  Created by Fabio Balancin on 9/11/09.
-//  Copyright 2009 Umpulo. All rights reserved.
-//
+//Pill.h 
 
 #import <UIKit/UIKit.h>
-
+#import <AudioToolbox/AudioToolbox.h>
 
 @interface Pill : UIImageView {
 
-	BOOL usingPill;
-	UIImageView* pillActiveView;
-	NSMutableDictionary* pigsDict;
+	UIImageView* pillActiveView; //objeto com a imagem da pilula
+	NSMutableDictionary* pigsDict; //matriz com objetos dos porquinhos
+	SystemSoundID up_life; //objeto de som
 	
 }
 
 @property(nonatomic, retain) NSMutableDictionary* pigsDict;
+@property(nonatomic, readwrite) SystemSoundID up_life;
 
 @end
